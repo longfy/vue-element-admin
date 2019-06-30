@@ -1,4 +1,4 @@
-# vue-demo
+# vue-element-admin
 
 ## Project setup
 ```
