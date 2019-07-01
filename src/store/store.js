@@ -27,7 +27,7 @@ export default new Vuex.Store({
       hidden: false,
     }],
     tagsView: [{
-      title: "home",
+      name: "home",
       path: "/home",
       affix: true
     }],

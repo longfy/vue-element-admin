@@ -6,8 +6,9 @@
         :key="index"
         :to="item.path"
         @contextmenu.prevent.native="_openMenu(item, $event)"
+        @click.native="_onTagItemHandle(item)"
       >
-        {{ item.title }}
+        {{ item.name }}
         <span
           v-if="!item.affix"
           class="el-icon-close"
@@ -27,6 +28,9 @@
 <script>
 import { mapState } from "vuex";
 import ScrollPanel from "./ScrollPanel";
+import Util from "@/utils/util.js";
+
+let util = new Util();
 export default {
   name: "Tags",
   components: {
@@ -41,7 +45,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["tagsView"])
+    ...mapState(["tagsView", "asideMenu"])
   },
   watch: {
     visible(value) {
@@ -53,6 +57,9 @@ export default {
     }
   },
   methods: {
+    _onTagItemHandle(record) {
+      this._setLevelList(record);
+    },
     _refreshSelectedTag(tag) {
       // 刷新
       this.$router.push(tag.path);
@@ -62,30 +69,36 @@ export default {
     },
     _closeSelectedTag(tag) {
       // 关闭当前
-      let tagsView = this.tagsView.filter((item, index, arr) => {
-        if (item.path == tag.path) {
-          let path = arr[index + 1].path || arr[index - 1].path;
-          this.$router.push(path);
-        }
-        return item.path !== tag.path;
-      });
+      let { newTagsView: tagsView, routeItem } = util.computeTagsView(
+        tag,
+        this.tagsView,
+        2
+      );
       this.$store.dispatch("setTagsView", tagsView);
+      this._setLevelList(routeItem);
+      this.$router.push(routeItem.path);
     },
     _closeOthersTags() {
       // 关闭其他
-      let tagsView = this.tagsView.filter((item, index, arr) => {
-        return item.path === this.selectedTag.path || item.affix;
-      });
+      this.$store.dispatch(
+        "setTagsView",
+        util.computeTagsView(this.selectedTag, this.tagsView, 3)
+      );
+      this._setLevelList(this.selectedTag);
       this.$router.push(this.selectedTag.path);
-      this.$store.dispatch("setTagsView", tagsView);
     },
     _closeAllTags() {
       // 关闭所有
-      let tagsView = this.tagsView.filter((item, index, arr) => {
-        return item.affix;
-      });
-      this.$router.push(tagsView[0].path);
+      let tagsView = util.computeTagsView(null, this.tagsView, 4);
       this.$store.dispatch("setTagsView", tagsView);
+      this._setLevelList(tagsView[0]);
+      this.$router.push(tagsView[0].path);
+    },
+    _setLevelList(record) {
+      this.$store.dispatch(
+        "setLevelList",
+        util.getBreadcrumbPath(record, this.asideMenu)
+      );
     },
     _openMenu(tag, e) {
       // 打开右键菜单

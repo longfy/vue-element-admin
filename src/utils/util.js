@@ -2,7 +2,45 @@ export default class Util {
   constructor() {
 
   }
-  // 根据路由id获取面包屑路径arr
+  // 计算tagsView，type：1添加、2删除、3删除其他、4删除所有
+  computeTagsView(record, tagsView, type = 1) {
+    let newTagsView, routeItem;
+    switch (type) {
+      case 1:
+        let pathArr = [];
+        newTagsView = tagsView;
+        tagsView.forEach((v, i) => {
+          pathArr.push(v.path);
+        });
+        if (pathArr.indexOf(record.path) === -1) {
+          record.affix = false;
+          newTagsView.unshift(record);
+        }
+        break;
+      case 2:
+        newTagsView = tagsView.filter((item, index, arr) => {
+          if (item.path == record.path) {
+            routeItem = arr[index + 1] || arr[index - 1];
+          }
+          return item.path !== record.path;
+        });
+        break;
+      case 3:
+        newTagsView = tagsView.filter((item, index, arr) => {
+          return item.path === record.path || item.affix;
+        });
+        break;
+      case 4:
+        newTagsView = tagsView.filter((item, index, arr) => {
+          return item.affix;
+        });
+        break;
+      default:
+        return;
+    }
+    return type !== 2 ? newTagsView : { newTagsView, routeItem };
+  }
+  // 根据路由currItem获取面包屑路径pathArr
   getBreadcrumbPath = (currItem, asideMenu) => {
     let pathArr = [currItem];
     function getParentObj(pid, arr) {

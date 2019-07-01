@@ -37,26 +37,7 @@ export default {
     Breadcrumb
   },
   data() {
-    return {
-      url: null,
-      navs: [
-        {
-          id: 1,
-          name: "我的桌面",
-          path: "/home"
-        },
-        {
-          id: 2,
-          name: "列表",
-          path: "/list"
-        },
-        {
-          id: 3,
-          name: "关于",
-          path: "/about"
-        }
-      ]
-    };
+    return {};
   },
   methods: {
     _logout() {

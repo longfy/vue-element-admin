@@ -23,7 +23,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["levelList", "tagsView", "asideMenu"])
+    ...mapState(["levelList"])
   },
   methods: {
     _handleLink(record) {
