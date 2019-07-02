@@ -28,7 +28,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["openAside", "asideMenu"]),
+    ...mapState("layout", ["openAside", "asideMenu"]),
     variables() {
       return variables;
     }

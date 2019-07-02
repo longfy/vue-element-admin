@@ -7,6 +7,10 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [{
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login/Login.vue')
+  }, {
     path: '/',
     component: () => import('@/views/layout/Layout.vue'),
     redirect: '/home',
@@ -27,13 +31,6 @@ const router = new Router({
       name: 'page404',
       component: () => import('@/views/404/404.vue')
     }]
-  }, {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/login/Login.vue')
-  }, {
-    path: '*',
-    component: () => import('@/views/404/404.vue')
   }]
 })
 

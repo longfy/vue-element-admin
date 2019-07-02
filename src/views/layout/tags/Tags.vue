@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import ScrollPanel from "./ScrollPanel";
 import Util from "@/utils/util.js";
 
@@ -45,7 +45,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["tagsView", "asideMenu"])
+    ...mapState("layout", ["tagsView", "asideMenu"])
   },
   watch: {
     visible(value) {
@@ -57,14 +57,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions("user", ["changeUserState"]),
+    ...mapActions("layout", ["changeLayoutState"]),
     _onTagItemHandle(record) {
       this._setLevelList(record);
     },
     _refreshSelectedTag(tag) {
       // 刷新
       this.$router.push(tag.path);
-      this.$store.dispatch("setIsLoad", false).then(() => {
-        this.$store.dispatch("setIsLoad", true);
+      this.changeLayoutState({
+        key: "isLoad",
+        newValue: false
+      }).then(() => {
+        this.changeLayoutState({
+          key: "isLoad",
+          newValue: true
+        });
       });
     },
     _closeSelectedTag(tag) {
@@ -74,31 +82,37 @@ export default {
         this.tagsView,
         2
       );
-      this.$store.dispatch("setTagsView", tagsView);
+      this.changeLayoutState({
+        key: "tagsView",
+        newValue: tagsView
+      });
       this._setLevelList(routeItem);
       this.$router.push(routeItem.path);
     },
     _closeOthersTags() {
       // 关闭其他
-      this.$store.dispatch(
-        "setTagsView",
-        util.computeTagsView(this.selectedTag, this.tagsView, 3)
-      );
+      this.changeLayoutState({
+        key: "tagsView",
+        newValue: util.computeTagsView(this.selectedTag, this.tagsView, 3)
+      });
       this._setLevelList(this.selectedTag);
       this.$router.push(this.selectedTag.path);
     },
     _closeAllTags() {
       // 关闭所有
       let tagsView = util.computeTagsView(null, this.tagsView, 4);
-      this.$store.dispatch("setTagsView", tagsView);
+      this.changeLayoutState({
+        key: "tagsView",
+        newValue: tagsView
+      });
       this._setLevelList(tagsView[0]);
       this.$router.push(tagsView[0].path);
     },
     _setLevelList(record) {
-      this.$store.dispatch(
-        "setLevelList",
-        util.getBreadcrumbPath(record, this.asideMenu)
-      );
+      this.changeLayoutState({
+        key: "levelList",
+        newValue: util.getBreadcrumbPath(record, this.asideMenu)
+      });
     },
     _openMenu(tag, e) {
       // 打开右键菜单

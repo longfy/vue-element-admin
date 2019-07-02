@@ -12,11 +12,15 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "Hamburger",
   computed: {
-    ...mapState(["openAside"])
+    ...mapState("layout", ["openAside"])
   },
   methods: {
+    ...mapActions("layout", ["changeLayoutState"]),
     _openAsideToggle() {
-      this.$store.dispatch("setOpenAside", !this.openAside);
+      this.changeLayoutState({
+        key: "openAside",
+        newValue: !this.openAside
+      });
     }
   }
 };

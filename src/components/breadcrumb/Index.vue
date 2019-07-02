@@ -23,7 +23,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["levelList"])
+    ...mapState("layout", ["levelList"])
   },
   methods: {
     _handleLink(record) {

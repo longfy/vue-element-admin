@@ -29,7 +29,7 @@ export default {
     Tags
   },
   computed: {
-    ...mapState(["openAside", "isLoad"])
+    ...mapState("layout", ["openAside", "isLoad"])
   }
 };
 </script>

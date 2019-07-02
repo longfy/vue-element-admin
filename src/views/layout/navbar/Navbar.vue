@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
-    <Hamburger style="padding: 0 15px;float: left;"/>
-    <Breadcrumb/>
+    <Hamburger style="padding: 0 15px;float: left;" />
+    <Breadcrumb />
     <el-dropdown class="login-info" trigger="click">
       <div class="avatar-wrapper">
         <i class="el-icon-user-solid"></i> 超级管理员
@@ -26,6 +26,7 @@
 
 <script>
 import { logout } from "@/utils/api";
+import { mapActions } from "vuex";
 import Hamburger from "@/components/hamburger/Index.vue";
 import Breadcrumb from "@/components/breadcrumb/Index.vue";
 import Util from "@/utils/util";
@@ -40,6 +41,7 @@ export default {
     return {};
   },
   methods: {
+    ...mapActions("user", ["changeUserState"]),
     _logout() {
       logout().then(
         res => {
@@ -49,7 +51,10 @@ export default {
               type: "success"
             });
             util.delCookie("isLogin");
-            this.$store.dispatch("isLogin", false);
+            this.changeUserState({
+              key: "isLogin",
+              newValue: false
+            });
             this.$router.push("/login");
           } else {
             this.$message.error(res.msg);

@@ -42,6 +42,7 @@
 
 <script>
 import { checkLogin, login } from "@/utils/api";
+import { mapActions } from "vuex";
 import verify from "@/utils/verify";
 import Util from "@/utils/util";
 
@@ -49,13 +50,6 @@ let util = new Util();
 
 export default {
   name: "login",
-  beforeCreate() {
-    checkLogin().then(res => {
-      if (res) {
-        this.$router.push("/home");
-      }
-    });
-  },
   data() {
     var verifyCode = (rule, value, callback) => {
       if (!this.newVerify.validate(value)) {
@@ -89,6 +83,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions("user", ["changeUserState"]),
     _submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -103,7 +98,11 @@ export default {
                   type: "success"
                 });
                 util.setCookie("isLogin", true);
-                this.$store.dispatch("isLogin", true);
+                this.changeUserState({
+                  key: "isLogin",
+                  newValue: true
+                });
+                console.log(this.$store.state.user);
                 this.$router.push("/home");
               } else {
                 this.$message.error(res.msg);
