@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { logout } from "@/utils/api";
+import { logout } from "@/api/api";
 import { mapActions } from "vuex";
 import Hamburger from "@/components/hamburger/Index.vue";
 import Breadcrumb from "@/components/breadcrumb/Index.vue";

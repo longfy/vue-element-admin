@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: '/', //根路径
+  publicPath: '/', //根路径
   outputDir: 'dist', //构建输出目录
   assetsDir: 'assets', //静态资源目录(css,js,imgage,font)
   lintOnSave: false, //是否开启es lint保存检测

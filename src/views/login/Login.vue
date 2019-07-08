@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { checkLogin, login } from "@/utils/api";
+import { checkLogin, login } from "@/api/api";
 import { mapActions } from "vuex";
 import verify from "@/utils/verify";
 import Util from "@/utils/util";
