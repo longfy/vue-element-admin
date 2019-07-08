@@ -85,35 +85,27 @@ export default {
   methods: {
     ...mapActions("user", ["changeUserState"]),
     _submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          login({
+          let res = await login({
             userName: this.formData.userName,
             password: this.formData.password
-          }).then(
-            res => {
-              if (res.status) {
-                this.$message({
-                  message: res.msg,
-                  type: "success"
-                });
-                util.setCookie("isLogin", true);
-                this.changeUserState({
-                  key: "isLogin",
-                  newValue: true
-                });
-                console.log(this.$store.state.user);
-                this.$router.push("/home");
-              } else {
-                this.$message.error(res.msg);
-              }
-            },
-            err => {
-              console.log(err);
-            }
-          );
+          });
+          if (res.status) {
+            this.$message({
+              message: res.msg,
+              type: "success"
+            });
+            util.setCookie("isLogin", true);
+            this.changeUserState({
+              key: "isLogin",
+              newValue: true
+            });
+            this.$router.push("/home");
+          } else {
+            this.$message.error(res.msg);
+          }
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

@@ -1,3 +1,4 @@
+import { Message } from 'element-ui'
 import axios from 'axios';
 import config from '../config/config'
 import qs from 'qs'
@@ -25,7 +26,12 @@ export function get(url, params) {
         }).then((res) => {
             resolve(res.data)
         }).catch(err => {
-            reject(err)
+            // reject(err)
+            Message({
+                showClose: true,
+                message: err,
+                type: 'error'
+            });
         })
     })
 }
@@ -37,7 +43,12 @@ export function post(url, params) {
             .then((res) => {
                 resolve(res.data)
             }).catch(err => {
-                reject(err)
+                // reject(err)
+                Message({
+                    showClose: true,
+                    message: err,
+                    type: 'error'
+                });
             })
     })
 }

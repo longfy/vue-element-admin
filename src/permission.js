@@ -60,25 +60,22 @@ const asideMenu = [{
 
 // 根据 token 获取用户对应的菜单
 function setAsideMenu() {
-  return new Promise((resolve, reject) => {
-    getNavMenu().then(res => {
-      store.dispatch('layout/changeLayoutState', {
-        key: 'asideMenu',
-        newValue: asideMenu
-      });
-      store.dispatch('layout/changeLayoutState', {
-        key: 'tagsView',
-        newValue: [asideMenu[0]]
-      });
-      store.dispatch('layout/changeLayoutState', {
-        key: 'levelList',
-        newValue: [asideMenu[0]]
-      });
-      asyncWhiteList.push(...getAsyncWhiteList(asideMenu));
-      resolve(asyncWhiteList);
-    }, err => {
-      reject('get aside menu error ...');
-    })
+  return new Promise(async (resolve, reject) => {
+    let res = await getNavMenu();
+    store.dispatch('layout/changeLayoutState', {
+      key: 'asideMenu',
+      newValue: asideMenu
+    });
+    store.dispatch('layout/changeLayoutState', {
+      key: 'tagsView',
+      newValue: [asideMenu[0]]
+    });
+    store.dispatch('layout/changeLayoutState', {
+      key: 'levelList',
+      newValue: [asideMenu[0]]
+    });
+    asyncWhiteList.push(...getAsyncWhiteList(asideMenu));
+    resolve(asyncWhiteList);
   })
 }
 

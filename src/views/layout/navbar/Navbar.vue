@@ -42,28 +42,22 @@ export default {
   },
   methods: {
     ...mapActions("user", ["changeUserState"]),
-    _logout() {
-      logout().then(
-        res => {
-          if (res.status) {
-            this.$message({
-              message: res.msg,
-              type: "success"
-            });
-            util.delCookie("isLogin");
-            this.changeUserState({
-              key: "isLogin",
-              newValue: false
-            });
-            this.$router.push("/login");
-          } else {
-            this.$message.error(res.msg);
-          }
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    async _logout() {
+      let res = await logout();
+      if (res.status) {
+        this.$message({
+          message: res.msg,
+          type: "success"
+        });
+        util.delCookie("isLogin");
+        this.changeUserState({
+          key: "isLogin",
+          newValue: false
+        });
+        this.$router.push("/login");
+      } else {
+        this.$message.error(res.msg);
+      }
     }
   }
 };
